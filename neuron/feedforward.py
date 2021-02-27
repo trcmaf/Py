@@ -25,7 +25,6 @@ n = Neuron(weights, bias)
 x1 = int(input("Enter x1 >> "))
 x2 = int(input("Enter x2 >> "))
 x = np.array([x1, x2])
-# for i in range(2):
-#     x = int(input("Enter x >> "))
+
 print(n.feedforward(x))  # 0.9990889488055994
 

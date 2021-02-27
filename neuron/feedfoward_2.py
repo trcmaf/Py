@@ -1,8 +1,7 @@
 import numpy as np
 
-# ... Здесь код из предыдущего раздела
 def sigmoid(x):
-    # Наша функция активации: f(x) = 1 / (1 + e^(-x))
+    # функция активации: f(x) = 1 / (1 + e^(-x))
     return 1 / (1 + np.exp(-x))
 
 class Neuron:
@@ -11,12 +10,9 @@ class Neuron:
         self.bias = bias
 
     def feedforward(self, inputs):
-        # Вводные данные о весе, добавление смещения
-        # и последующее использование функции активации
-
+        # Вводные данные о весе, добавление смещения и последующее использование функции активации
         total = np.dot(self.weights, inputs) + self.bias
         return sigmoid(total)
-
 
 weights = np.array([0, 1])  # w1 = 0, w2 = 1
 bias = 4  # b = 4
