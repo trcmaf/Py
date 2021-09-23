@@ -1,12 +1,10 @@
 import numpy as np
 
-
 # Сигмоида
 def nonlin(x, deriv=False):
     if (deriv == True):
         return x * (1 - x)  # f(x) = x
     return 1 / (1 + np.exp(-x))
-
 
 # набор входных данных
 X = np.array([[0, 0, 1],
