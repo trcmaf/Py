@@ -31,3 +31,17 @@ Y_test_pred = classifier_new.predict(X_test)
 accuracy = 100.0 * (Y_test == Y_test_pred).sum() / X_test.shape[0]
 print ("Accuracy of the new classifier = ", round(accuracy, 2), " %")
 visualize_classifier(classifier_new, X_test, Y_test)
+
+#Accuracy, precision, recall
+num_folds = 3
+accuracy_values = model_selection.cross_val_score(classifier, X, Y, scoring='accuracy', cv = num_folds)
+print ("Accuracy = " + str(round(100 * accuracy_values.mean(), 2)) + " %")
+
+precision_values = model_selection.cross_val_score(classifier, X, Y, scoring='precision_weighted', cv = num_folds)
+print ("Precision = " + str(round(100 * precision_values.mean(), 2)) + " %")
+
+recall_values = model_selection.cross_val_score(classifier, X, Y, scoring='recall_weighted', cv = num_folds)
+print ("Recall = " + str(round(100 * recall_values.mean(), 2)) + " %")
+
+f1_values = model_selection.cross_val_score(classifier, X, Y, scoring='f1_weighted', cv = num_folds)
+print ("F1 = " + str(round(100 * f1_values.mean(), 2)) + " %")
