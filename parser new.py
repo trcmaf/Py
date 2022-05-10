@@ -21,7 +21,7 @@ for data in main_all:
 for data in main_all:
     print (data.text)"""
 
-oth_all = soup.findAll(name='div', class_='othnews')
+oth_all = soup.findAll(name='div', class_='othnews') #findAll
 oth_filtr = []
 for data in oth_all:
     if data.find(name='h4') is not None:
