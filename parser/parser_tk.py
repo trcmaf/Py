@@ -1,5 +1,4 @@
-import tkinter as tk
-import tkinter.messagebox as mb
+import tkinter as tk, tkinter as mb
 
 window = tk.Tk()
 

@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-import tkinter as tk
+from parser.final import tkinter as tk
 
 window = tk.Tk()
 

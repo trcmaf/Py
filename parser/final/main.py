@@ -1,5 +1,5 @@
 import datetime
-import DB
+from parser.final import DB
 import os
 import requests  # импорт библиотеки request
 from bs4 import BeautifulSoup  # импорт библиотеки BeautifulSoup
