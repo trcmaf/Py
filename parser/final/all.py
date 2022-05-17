@@ -18,13 +18,11 @@ def clicked():
     port = port_entry.get()
     db_name = db_name_entry.get()
 
-    con = psycopg2.connect(
-        database=db_name,
-        user=username,
-        password=password,
-        host=host,
-        port=port
-    )
+    def sql_clicked():
+        sql =  '\'\'\'' + sql_entry.get() + '\'\'\''
+        print(sql)
+        cur.execute(sql)
+        print(cur.fetchall())
 
     if username == '' or password == '' or host == '' or port == '' or db_name == '':
         mb.showerror(title='Ошибка', message='Неправильно введены данные')
@@ -36,7 +34,13 @@ def clicked():
         new_window.geometry('450x450')
         new_main_label = tk.Label(new_window, text='Введите SQL запрос', font=('Arial', 13), **header_padding)
         new_main_label.pack()
-
+        con = psycopg2.connect(
+            database=db_name,
+            user=username,
+            password=password,
+            host=host,
+            port=port
+        )
         print("Database opened successfully")
         cur = con.cursor()
         cur.execute('''DROP TABLE IF EXISTS MAINNEWS''')
@@ -51,6 +55,18 @@ def clicked():
         print("Table TOPNEWS created succcessfully")
         cur.execute('''CREATE TABLE OTHNEWS (NAME TEXT NOT NULL, FILE TEXT, KATEGORY TEXT, COMMENTS TEXT);''')
         print("Table OTHNEWS created succcessfully")
+
+        sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
+        sql_entry.pack()
+
+        sql_btn = tk.Button(new_window, text='Выполнить', command=sql_clicked)
+        sql_btn.pack(**base_padding)
+
+        result_label = tk.Label(new_window, text='Вывод: ', font=label_font, **base_padding)
+        result_label.pack()
+
+        result = scrolledtext.ScrolledText(new_window, width=40, height=15, bg="#fff", fg='#444')
+        result.pack()
 
         def parser():
             url = 'http://vz.ru'
@@ -296,29 +312,12 @@ def clicked():
                     news_link = None
 
                     my_file.close()
-            #con.close()
-        parser()
+            con.close()
 
-        def sql_clicked():
-            sql = '\'\'\'' + sql_entry.get() + '\'\'\''
-            print(sql)
-            cur.execute(sql)
-            print(cur.fetchall())
-            con.commit()
+        # scroll = tk.Scrollbar(new_window, command=result.yview)
+        # scroll.pack(side="right", fill="y")
+        # result.config(yscrollcommand=scroll.set)
 
-        sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
-        sql_entry.pack()
-
-        sql_btn = tk.Button(new_window, text='Выполнить', command=sql_clicked)
-        sql_btn.pack(**base_padding)
-
-        result_label = tk.Label(new_window, text='Вывод: ', font=label_font, **base_padding)
-        result_label.pack()
-
-        result = scrolledtext.ScrolledText(new_window, width=40, height=15, bg="#fff", fg='#444')
-        result.pack()
-
-        cur.close()
         con.commit()
         con.close()
         #new_window.protocol("WM_DELETE_WINDOW", window.destroy())
