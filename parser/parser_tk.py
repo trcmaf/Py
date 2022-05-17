@@ -303,7 +303,11 @@ def clicked():
             sql = '\'\'\'' + sql_entry.get() + '\'\'\''
             print(sql)
             cur.execute(sql)
-            print(cur.fetchall())
+            final = cur.fetchall()
+            for fin in final:
+                count = 0
+                print(fin[count])
+                count += 1
             con.commit()
 
         sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
@@ -318,8 +322,8 @@ def clicked():
         result = scrolledtext.ScrolledText(new_window, width=40, height=15, bg="#fff", fg='#444')
         result.pack()
 
-        cur.close()
         con.commit()
+        cur.close()
         con.close()
         #new_window.protocol("WM_DELETE_WINDOW", window.destroy())
         new_window.mainloop()
