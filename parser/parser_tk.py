@@ -29,7 +29,7 @@ def clicked():
     if username == '' or password == '' or host == '' or port == '' or db_name == '':
         mb.showerror(title='Ошибка', message='Неправильно введены данные')
     else:
-        window.withdraw()
+        #window.withdraw()
         new_window = tk.Tk()
         new_window.wm_attributes("-topmost", 1)
         new_window.title('Парсер vz.ru')
