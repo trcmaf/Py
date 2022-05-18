@@ -300,7 +300,7 @@ def clicked():
         parser()
 
         def sql_clicked():
-            sql = '\'\'\'' + sql_entry.get() + '\'\'\''
+            sql = sql_entry.get()
             print(sql)
             cur.execute(sql)
             final = cur.fetchall()
