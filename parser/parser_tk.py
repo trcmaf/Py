@@ -323,8 +323,8 @@ def clicked():
         result.pack()
 
         con.commit()
-        cur.close()
-        con.close()
+        #cur.close()
+        #con.close()
         #new_window.protocol("WM_DELETE_WINDOW", window.destroy())
         new_window.mainloop()
 
