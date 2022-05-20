@@ -296,7 +296,7 @@ def clicked():
                     news_link = None
 
                     my_file.close()
-            #con.close()
+
         parser()
 
         def sql_clicked():
