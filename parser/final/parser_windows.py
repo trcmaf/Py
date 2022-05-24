@@ -1,15 +1,11 @@
-import tkinter_ as tk
-import tkinter_.messagebox as mb
-from tkinter_ import scrolledtext
+import tkinter as tk
+import tkinter.messagebox as mb
+from tkinter import scrolledtext
 import psycopg2
 import datetime
 import os
 import requests
 from bs4 import BeautifulSoup
-
-def on_closing():
-    if mb.askokcancel("Quit", "Do you want to quit?"):
-        window.destroy()
 
 def clicked():
     username = username_entry.get()
@@ -18,29 +14,25 @@ def clicked():
     port = port_entry.get()
     db_name = db_name_entry.get()
 
-    def sql_clicked():
-        sql =  '\'\'\'' + sql_entry.get() + '\'\'\''
-        print(sql)
-        cur.execute(sql)
-        print(cur.fetchall())
+    con = psycopg2.connect(
+        database=db_name,
+        user=username,
+        password=password,
+        host=host,
+        port=port
+    )
 
     if username == '' or password == '' or host == '' or port == '' or db_name == '':
         mb.showerror(title='Ошибка', message='Неправильно введены данные')
     else:
-        window.withdraw()
+        #window.withdraw()
         new_window = tk.Tk()
         new_window.wm_attributes("-topmost", 1)
         new_window.title('Парсер vz.ru')
         new_window.geometry('450x450')
         new_main_label = tk.Label(new_window, text='Введите SQL запрос', font=('Arial', 13), **header_padding)
         new_main_label.pack()
-        con = psycopg2.connect(
-            database=db_name,
-            user=username,
-            password=password,
-            host=host,
-            port=port
-        )
+
         print("Database opened successfully")
         cur = con.cursor()
         cur.execute('''DROP TABLE IF EXISTS MAINNEWS''')
@@ -56,18 +48,6 @@ def clicked():
         cur.execute('''CREATE TABLE OTHNEWS (NAME TEXT NOT NULL, FILE TEXT, KATEGORY TEXT, COMMENTS TEXT);''')
         print("Table OTHNEWS created succcessfully")
 
-        sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
-        sql_entry.pack()
-
-        sql_btn = tk.Button(new_window, text='Выполнить', command=sql_clicked)
-        sql_btn.pack(**base_padding)
-
-        result_label = tk.Label(new_window, text='Вывод: ', font=label_font, **base_padding)
-        result_label.pack()
-
-        result = scrolledtext.ScrolledText(new_window, width=40, height=15, bg="#fff", fg='#444')
-        result.pack()
-
         def parser():
             url = 'http://vz.ru'
             page = requests.get(url)
@@ -81,6 +61,7 @@ def clicked():
             o = 0
             date_time = datetime.datetime.now()
             format_date_time = date_time.strftime('%d.%m.%Y_%H.%M.%S')
+            date_time_for_file = date_time.strftime('%d.%m.%Y')
             if os.path.exists("C:\parser"):
                 exists = 1
             else:
@@ -125,6 +106,7 @@ def clicked():
                     my_file = open(fullpath_topnews_file + ".txt", "w+")  # открыть файл для записи
 
                     my_file.write(link.text)  # запись названия в файл
+                    my_file.write('\n' + date_time_for_file)
 
                     news_page = requests.get(news_link)  # для парсинга страницы самой новости
                     news = BeautifulSoup(news_page.text, 'html.parser')
@@ -166,6 +148,7 @@ def clicked():
                     my_file = open(fullpath_mainnews_file + ".txt", "w+")  # открыть файл для записи
 
                     my_file.write(link.text)  # запись названия в файл
+                    my_file.write('\n' + date_time_for_file)
 
                     news_block = data
                     news_page = requests.get(news_link)  # для парсинга страницы самой новости
@@ -217,6 +200,8 @@ def clicked():
                     my_file = open(fullpath_othnews_file + ".txt", "w+")  # открыть файл для записи
 
                     my_file.write(link.text)  # запись названия в файл
+                    my_file.write('\n' + date_time_for_file)
+
                     name_of_f = link.text
                     theme = None
 
@@ -292,7 +277,8 @@ def clicked():
                     my_file = open(fullpath_hourall_file + ".txt", "w+")  # открыть файл для записи
 
                     my_file.write(link.text)  # запись названия в файл
-                    my_file.write(news_time)
+                    my_file.write('\n' + date_time_for_file)
+                    my_file.write('\n'+ news_time)
                     news_page = requests.get(news_link)  # для парсинга страницы самой новости
                     news = BeautifulSoup(news_page.text, 'html.parser')
                     b_all = news.find(name='div', class_='text newtext')  # теги для поиска текста
@@ -312,15 +298,35 @@ def clicked():
                     news_link = None
 
                     my_file.close()
-            con.close()
+            #con.close()
+        parser()
 
-        # scroll = tk.Scrollbar(new_window, command=result.yview)
-        # scroll.pack(side="right", fill="y")
-        # result.config(yscrollcommand=scroll.set)
+        def sql_clicked():
+            sql = sql_entry.get()
+            print(sql)
+            cur.execute(sql)
+            final = cur.fetchall()
+            for fin in final:
+                count = 0
+                print(fin[count])
+                count += 1
+            con.commit()
+
+        sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
+        sql_entry.pack()
+
+        sql_btn = tk.Button(new_window, text='Выполнить', command=sql_clicked)
+        sql_btn.pack(**base_padding)
+
+        result_label = tk.Label(new_window, text='Вывод: ', font=label_font, **base_padding)
+        result_label.pack()
+
+        result = scrolledtext.ScrolledText(new_window, width=40, height=15, bg="#fff", fg='#444')
+        result.pack()
 
         con.commit()
-        con.close()
-        #new_window.protocol("WM_DELETE_WINDOW", window.destroy())
+        #cur.close()
+        #con.close()
         new_window.mainloop()
 
 
@@ -336,7 +342,7 @@ label_font = ('Arial', 11)
 base_padding = {'padx': 10, 'pady': 8}
 header_padding = {'padx': 10, 'pady': 12}
 
-main_label = tk.Label(window, text='Авторизация', font=font_header, **header_padding)
+main_label = tk.Label(window, text='Аутентификация', font=font_header, **header_padding)
 main_label.pack()
 
 # метка для поля ввода имени
@@ -378,5 +384,4 @@ db_name_entry.pack()
 send_btn = tk.Button(window, text='Войти', command=clicked)
 send_btn.pack(**base_padding)
 
-#window.protocol("WM_DELETE_WINDOW", on_closing)
 window.mainloop()

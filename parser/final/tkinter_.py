@@ -1,5 +1,5 @@
-import tkinter as tk
-import tkinter.messagebox as mb
+import tkinter_ as tk
+import tkinter_.messagebox as mb
 
 window = tk.Tk()
 window.title('Авторизация')
