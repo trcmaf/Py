@@ -307,7 +307,6 @@ def clicked():
             print(sql)
             cur.execute(sql)
             list = cur.fetchall()
-            #heads = ['Название', 'Ссылка']
             if sql == "select * from othnews":
                 heads = ['Название', 'Ссылка', 'Категория', 'Комментарии']
             else:
@@ -335,12 +334,7 @@ def clicked():
         result_label = tk.Label(new_window, text='Вывод: ', font=label_font, **base_padding)
         result_label.pack()
 
-        # result = scrolledtext.ScrolledText(new_window, width=40, height=15, bg="#fff", fg='#444')
-        # result.pack()
-
         con.commit()
-        #cur.close()
-        #con.close()
         new_window.mainloop()
 
 
