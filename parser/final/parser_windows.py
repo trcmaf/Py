@@ -1,6 +1,7 @@
 import tkinter as tk
 import tkinter.messagebox as mb
 from tkinter import scrolledtext
+from tkinter import ttk
 import psycopg2
 import datetime
 import os
@@ -29,7 +30,7 @@ def clicked():
         new_window = tk.Tk()
         new_window.wm_attributes("-topmost", 1)
         new_window.title('Парсер vz.ru')
-        new_window.geometry('450x450')
+        new_window.geometry('600x450')
         new_main_label = tk.Label(new_window, text='Введите SQL запрос', font=('Arial', 13), **header_padding)
         new_main_label.pack()
 
@@ -305,11 +306,24 @@ def clicked():
             sql = sql_entry.get()
             print(sql)
             cur.execute(sql)
-            final = cur.fetchall()
-            for fin in final:
-                count = 0
-                print(fin[count])
-                count += 1
+            list = cur.fetchall()
+            #heads = ['Название', 'Ссылка']
+            if sql == "select * from othnews":
+                heads = ['Название', 'Ссылка', 'Категория', 'Комментарии']
+            else:
+                heads = ['Название', 'Ссылка']
+
+            table = ttk.Treeview(new_window, show='headings')
+            table['columns'] = heads
+
+            for header in heads:
+                table.heading(header, text=header, anchor='center')
+                table.column(header, anchor='center')
+
+            for row in list:
+                table.insert('', tk.END, values=row)
+
+            table.pack(expand = tk.YES, fill = tk.BOTH)
             con.commit()
 
         sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
@@ -321,8 +335,8 @@ def clicked():
         result_label = tk.Label(new_window, text='Вывод: ', font=label_font, **base_padding)
         result_label.pack()
 
-        result = scrolledtext.ScrolledText(new_window, width=40, height=15, bg="#fff", fg='#444')
-        result.pack()
+        # result = scrolledtext.ScrolledText(new_window, width=40, height=15, bg="#fff", fg='#444')
+        # result.pack()
 
         con.commit()
         #cur.close()
