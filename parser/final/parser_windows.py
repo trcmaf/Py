@@ -15,6 +15,8 @@ def clicked():
     port = port_entry.get()
     db_name = db_name_entry.get()
 
+    col_table = 0
+
     con = psycopg2.connect(
         database=db_name,
         user=username,
@@ -113,11 +115,14 @@ def clicked():
                     news = BeautifulSoup(news_page.text, 'html.parser')
                     p_all = news.find(name='div', class_='text newtext')  # теги для поиска текста
                     for p in p_all:  # текст новости
-                        if p.find('b') is not None:
-                            my_file.write(p.text)
-                        if p.find('p') is not None:
-                            my_file.write(p.text)
-                        o = o + 1
+                        if p is not None:
+                            if p.find('b') is not None:
+                                my_file.write(p.text)
+                            if p.find('p') is not None:
+                                my_file.write(p.text)
+                            #o = o + 1
+                        else:
+                            continue
 
                     cur.execute(
                         "INSERT INTO TOPNEWS (NAME,FILE) VALUES (%s, %s)", (link.text, fullpath_topnews_file)
@@ -215,11 +220,12 @@ def clicked():
                     news = BeautifulSoup(news_page.text, 'html.parser')
                     p_all = news.find(name='div', class_='text newtext')  # теги для поиска текста
                     for p in p_all:  # текст новости
-                        if p.find('b') is not None:
-                            my_file.write(p.text)
-                        if p.find('p') is not None:
-                            my_file.write(p.text)
-                        o = o + 1
+                        if p is not None:
+                            if p.find('b') is not None:
+                                my_file.write(p.text)
+                            if p.find('p') is not None:
+                                my_file.write(p.text)
+                            #o = o + 1
 
                     news_page = None
                     news_link = None
@@ -284,11 +290,14 @@ def clicked():
                     news = BeautifulSoup(news_page.text, 'html.parser')
                     b_all = news.find(name='div', class_='text newtext')  # теги для поиска текста
                     for b in b_all:  # текст новости
-                        if b.find('b') is not None:
-                            my_file.write(b.text)
-                        if b.find('p') is not None:
-                            my_file.write(b.text)
-                        o = o + 1
+                        if b is not None:
+                            if b.find('b') is not None:
+                                my_file.write(b.text)
+                            if b.find('p') is not None:
+                                my_file.write(b.text)
+                            #o = o + 1
+                        else:
+                            continue
 
                     cur.execute(
                         "INSERT INTO HOURNEWS (NAME,FILE) VALUES (%s, %s)", (link.text, fullpath_hourall_file)
@@ -304,15 +313,24 @@ def clicked():
 
         def sql_clicked():
             sql = sql_entry.get()
-            print(sql)
             cur.execute(sql)
             list = cur.fetchall()
             if sql == "select * from othnews":
                 heads = ['Название', 'Ссылка', 'Категория', 'Комментарии']
+            elif sql == "select * from mainnews":
+                heads = ['Название', 'Ссылка']
+            elif sql == "select * from topnews":
+                heads = ['Название', 'Ссылка']
+            elif sql == "select * from hournews":
+                heads = ['Название', 'Ссылка']
+
             else:
                 heads = ['Название', 'Ссылка']
 
             table = ttk.Treeview(new_window, show='headings')
+
+            print(table.winfo_exists())
+
             table['columns'] = heads
 
             for header in heads:
@@ -323,6 +341,12 @@ def clicked():
                 table.insert('', tk.END, values=row)
 
             table.pack(expand = tk.YES, fill = tk.BOTH)
+            sum_table = col_table + 1
+            print (sum_table)
+
+            # print(sql_btn.winfo_children())
+            # for widget in sql_btn.winfo_children():
+            # widget.destroy()
             con.commit()
 
         sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
@@ -336,7 +360,6 @@ def clicked():
 
         con.commit()
         new_window.mainloop()
-
 
 window = tk.Tk()
 window.title('Парсер vz.ru')
