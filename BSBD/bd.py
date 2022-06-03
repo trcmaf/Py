@@ -240,7 +240,7 @@ def clicked():
                                             my_file.write(p.text)
                                         if p.find('p') is not None:
                                             my_file.write(p.text)
-                                        o = o + 1
+
                                     n_page = None
                                     n_link = None
                                 else:
@@ -299,33 +299,41 @@ def clicked():
         def sql_clicked():
             sql = sql_entry.get()
             cur.execute(sql)
-            list = cur.fetchall()
+            #list = cur.fetchall()
             if sql == "select * from othnews":
+                list = cur.fetchall()
                 heads = ['Название', 'Ссылка', 'Категория', 'Комментарии']
             elif sql == "select * from mainnews":
+                list = cur.fetchall()
                 heads = ['Название', 'Ссылка']
             elif sql == "select * from topnews":
+                list = cur.fetchall()
                 heads = ['Название', 'Ссылка']
             elif sql == "select * from hournews":
+                list = cur.fetchall()
                 heads = ['Название', 'Ссылка']
 
             elif sql == "select * from favourites":
-                heads = ['Название mainnews', 'Название othnews', 'Название topnews', 'Название hournews', 'Ссылка mainnews', 'Ссылка othnews', 'Ссылка topnews', 'Ссылка hournews']
+                list = cur.fetchall()
+                heads = ['Название (mainnews)', 'Ссылка (mainnews)', 'Название (othnews)', 'Ссылка (othnews)', 'Название (hournews)', 'Ссылка (hournews)', 'Название (topnews)', 'Ссылка (topnews)']
             elif sql == "select * from notes":
-                heads = ['Название', 'Заметка']
+                list = cur.fetchall()
+                heads = ['Название (mainnews)', 'Заметка (mainnews)', 'Название (othnews)', 'Заметка (othnews)', 'Название (hournews)', 'Заметка (hournews)', 'Название (topnews)', 'Заметка (topnews)']
             elif sql == "select * from othnews_kategory":
+                list = cur.fetchall()
                 heads = ['Название', 'Категория']
             elif sql == "select * from othnews_comments":
+                list = cur.fetchall()
                 heads = ['Название', 'Комментарии']
 
             elif "create" in sql or "delete" in sql or "insert" in sql or "update" in sql:
                 print ("Команда выполнена успешно")
+                heads = 0
             else:
                 print ("Ошибка")
+                heads = 0
 
             table = ttk.Treeview(new_window, show='headings')
-
-            print(table.winfo_exists())
 
             table['columns'] = heads
 
@@ -337,9 +345,6 @@ def clicked():
                 table.insert('', tk.END, values=row)
 
             table.pack(expand = tk.YES, fill = tk.BOTH)
-            sum_table = col_table + 1
-            print (sum_table)
-
             con.commit()
 
         sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
