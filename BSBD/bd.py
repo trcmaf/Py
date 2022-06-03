@@ -1,6 +1,5 @@
 import tkinter as tk
 import tkinter.messagebox as mb
-from tkinter import scrolledtext
 from tkinter import ttk
 import psycopg2
 import datetime
@@ -35,20 +34,7 @@ def clicked():
         new_main_label = tk.Label(new_window, text='Введите SQL запрос', font=('Arial', 13), **header_padding)
         new_main_label.pack()
 
-        print("Database opened successfully")
         cur = con.cursor()
-        cur.execute('''DROP TABLE IF EXISTS MAINNEWS''')
-        cur.execute('''DROP TABLE IF EXISTS HOURNEWS''')
-        cur.execute('''DROP TABLE IF EXISTS TOPNEWS''')
-        cur.execute('''DROP TABLE IF EXISTS OTHNEWS''')
-        cur.execute('''CREATE TABLE MAINNEWS (NAME TEXT NOT NULL, FILE TEXT);''')
-        print("Table MAINNEWS created succcessfully")
-        cur.execute('''CREATE TABLE HOURNEWS (NAME TEXT NOT NULL, FILE TEXT);''')
-        print("Table HOURNEWS created succcessfully")
-        cur.execute('''CREATE TABLE TOPNEWS (NAME TEXT NOT NULL, FILE TEXT);''')
-        print("Table TOPNEWS created succcessfully")
-        cur.execute('''CREATE TABLE OTHNEWS (NAME TEXT NOT NULL, FILE TEXT, KATEGORY TEXT, COMMENTS TEXT);''')
-        print("Table OTHNEWS created succcessfully")
 
         def parser():
             url = 'http://vz.ru'
@@ -323,8 +309,19 @@ def clicked():
             elif sql == "select * from hournews":
                 heads = ['Название', 'Ссылка']
 
+            elif sql == "select * from favourites":
+                heads = ['Название mainnews', 'Название othnews', 'Название topnews', 'Название hournews', 'Ссылка mainnews', 'Ссылка othnews', 'Ссылка topnews', 'Ссылка hournews']
+            elif sql == "select * from notes":
+                heads = ['Название', 'Заметка']
+            elif sql == "select * from othnews_kategory":
+                heads = ['Название', 'Категория']
+            elif sql == "select * from othnews_comments":
+                heads = ['Название', 'Комментарии']
+
+            elif "create" in sql or "delete" in sql or "insert" in sql or "update" in sql:
+                print ("Команда выполнена успешно")
             else:
-                heads = ['Название', 'Ссылка']
+                print ("Ошибка")
 
             table = ttk.Treeview(new_window, show='headings')
 
