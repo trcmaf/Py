@@ -299,6 +299,7 @@ def clicked():
         def sql_clicked():
             sql = sql_entry.get()
             cur.execute(sql)
+            con.commit()
             #list = cur.fetchall()
             if sql == "select * from othnews":
                 list = cur.fetchall()
@@ -326,26 +327,29 @@ def clicked():
                 list = cur.fetchall()
                 heads = ['Название', 'Комментарии']
 
-            elif "create" in sql or "delete" in sql or "insert" in sql or "update" in sql:
+            elif "create" in sql or "drop" in sql or "insert" in sql or "update" in sql:
                 print ("Команда выполнена успешно")
-                heads = 0
+                heads = [0]
+                list = [0]
             else:
                 print ("Ошибка")
-                heads = 0
+                heads = [0]
+                list = [0]
 
             table = ttk.Treeview(new_window, show='headings')
 
             table['columns'] = heads
 
-            for header in heads:
-                table.heading(header, text=header, anchor='center')
-                table.column(header, anchor='center')
+            if heads != [0]:
+                for header in heads:
+                    table.heading(header, text=header, anchor='center')
+                    table.column(header, anchor='center')
 
-            for row in list:
-                table.insert('', tk.END, values=row)
+            if list != [0]:
+                for row in list:
+                    table.insert('', tk.END, values=row)
 
             table.pack(expand = tk.YES, fill = tk.BOTH)
-            con.commit()
 
         sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
         sql_entry.pack()
@@ -360,6 +364,7 @@ def clicked():
         new_window.mainloop()
 
 window = tk.Tk()
+window["bg"] = "#75ddf5"
 window.title('Парсер vz.ru')
 window.geometry('450x450')
 window.resizable(False, False)
@@ -371,39 +376,39 @@ label_font = ('Arial', 11)
 base_padding = {'padx': 10, 'pady': 8}
 header_padding = {'padx': 10, 'pady': 12}
 
-main_label = tk.Label(window, text='Аутентификация', font=font_header, **header_padding)
+main_label = tk.Label(window, text='Авторизация', font=font_header, **header_padding, background="#75ddf5")
 main_label.pack()
 
 # метка для поля ввода имени
-username_label = tk.Label(window, text='Имя пользователя: ', font=label_font , **base_padding)
+username_label = tk.Label(window, text='Имя пользователя: ', font=label_font , **base_padding, background="#75ddf5")
 username_label.pack()
 # поле ввода имени
 username_entry = tk.Entry(window, bg='#fff', fg='#444', font=font_entry)
 username_entry.pack()
 
 # метка для поля ввода пароля
-password_label = tk.Label(window, text='Пароль: ', font=label_font , **base_padding)
+password_label = tk.Label(window, text='Пароль: ', font=label_font , **base_padding, background="#75ddf5")
 password_label.pack()
 # поле ввода пароля
 password_entry = tk.Entry(window, show='*', bg='#fff', fg='#444', font=font_entry)
 password_entry.pack()
 
 # метка для поля ввода host
-host_label = tk.Label(window, text='Host: ', font=label_font , **base_padding)
+host_label = tk.Label(window, text='Host: ', font=label_font , **base_padding, background="#75ddf5")
 host_label.pack()
 # поле ввода host
 host_entry = tk.Entry(window, bg='#fff', fg='#444', font=font_entry)
 host_entry.pack()
 
 # метка для поля ввода port
-port_label = tk.Label(window, text='Порт: ', font=label_font , **base_padding)
+port_label = tk.Label(window, text='Порт: ', font=label_font , **base_padding, background="#75ddf5")
 port_label.pack()
 # поле ввода port
 port_entry = tk.Entry(window, bg='#fff', fg='#444', font=font_entry)
 port_entry.pack()
 
 # метка для поля ввода названия БД
-db_name_label = tk.Label(window, text='Имя БД: ', font=label_font , **base_padding)
+db_name_label = tk.Label(window, text='Имя БД: ', font=label_font , **base_padding, background="#75ddf5")
 db_name_label.pack()
 # поле ввода названия БД
 db_name_entry = tk.Entry(window, bg='#fff', fg='#444', font=font_entry)
