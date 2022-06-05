@@ -87,7 +87,6 @@ def clicked():
                 hournews_path = '/home/maria/parser/_hournews_'
 
             news_block = []
-
             fullpath_topnews = os.path.join(topnews_path, format_date_time)
             os.mkdir(fullpath_topnews)
             for data in top_all:
