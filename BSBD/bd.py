@@ -300,7 +300,6 @@ def clicked():
             sql = sql_entry.get()
             cur.execute(sql)
             con.commit()
-            #list = cur.fetchall()
             if sql == "select * from othnews":
                 list = cur.fetchall()
                 heads = ['Название', 'Ссылка', 'Категория', 'Комментарии']
@@ -340,16 +339,14 @@ def clicked():
 
             table['columns'] = heads
 
-            if heads != [0]:
+            if heads != [0] and list != [0]:
                 for header in heads:
                     table.heading(header, text=header, anchor='center')
                     table.column(header, anchor='center')
-
-            if list != [0]:
                 for row in list:
                     table.insert('', tk.END, values=row)
+                table.pack(expand=tk.YES, fill=tk.BOTH)
 
-            table.pack(expand = tk.YES, fill = tk.BOTH)
 
         sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
         sql_entry.pack()
