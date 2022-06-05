@@ -14,8 +14,6 @@ def clicked():
     port = port_entry.get()
     db_name = db_name_entry.get()
 
-    col_table = 0
-
     con = psycopg2.connect(
         database=db_name,
         user=username,
@@ -127,8 +125,6 @@ def clicked():
                 if data.find(name='h1') is not None:
                     link = data.find('a')
 
-                    # add_text = news_block.find(name='a', class_='text')
-                    # print(add_text.text)  # текст начала статьи
                     news_link = 'https://vz.ru' + link.get('href')  # ссылка на статью
 
                     pr_link = link.text
@@ -175,7 +171,6 @@ def clicked():
                     oth_news_h4 = news_block.findAll(name='h4')
                     oth_news_h5 = news_block.findAll(name='h5')
                     oth_news_div = news_block.findAll('div')
-                    # print(news_block)
 
                     for h4 in oth_news_h4:
                         if h4.find('a') is not None:
@@ -294,7 +289,7 @@ def clicked():
                     news_link = None
 
                     my_file.close()
-            #con.close()
+
         parser()
 
         def sql_clicked():
@@ -348,7 +343,6 @@ def clicked():
                     table.insert('', tk.END, values=row)
                 table.pack(expand=tk.YES, fill=tk.BOTH)
 
-
         sql_entry = tk.Entry(new_window, width=40, bg='#fff', fg='#444', font=font_entry)
         sql_entry.pack()
 
@@ -358,7 +352,6 @@ def clicked():
         result_label = tk.Label(new_window, text='Вывод: ', font=label_font, **base_padding)
         result_label.pack()
 
-        con.commit()
         new_window.mainloop()
 
 window = tk.Tk()
