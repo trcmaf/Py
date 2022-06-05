@@ -39,7 +39,8 @@ def clicked():
         def parser():
             url = 'http://vz.ru'
             page = requests.get(url)
-            print(page.status_code)  # статус код = 200 --> подключено
+            if page.status_code == 200:
+                print("Подключение к vz.ru прошло успешно")
             soup = BeautifulSoup(page.text, 'html.parser')
 
             main_all = soup.findAll(name='div', class_='mainnews')
