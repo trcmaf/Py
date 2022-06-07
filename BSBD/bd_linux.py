@@ -49,30 +49,30 @@ def clicked():
             date_time = datetime.datetime.now()
             format_date_time = date_time.strftime('%d.%m.%Y_%H.%M.%S')
             date_time_for_file = date_time.strftime('%d.%m.%Y')
-            if os.path.exists("C:\parser"):
+            if os.path.exists("/home/maria/parser"):
                 exists = 1
             else:
-                os.mkdir("C:\parser")
-            if os.path.exists("C:\parser\_topnews_"):
-                topnews_path = 'C:\parser\_topnews_'
+                os.mkdir("/home/maria/parser")
+            if os.path.exists("/home/maria/parser/_topnews_"):
+                topnews_path = '/home/maria/parser/_topnews_'
             else:
-                os.mkdir("C:\parser\_topnews_")
-                mainnews_path = 'C:\parser\_topnews_'
-            if os.path.exists("C:\parser\_mainnews_"):
-                mainnews_path = 'C:\parser\_mainnews_'
+                os.mkdir("/home/maria/parser/_topnews_")
+                mainnews_path = '/home/maria/parser/_topnews_'
+            if os.path.exists("/home/maria/parser/_mainnews_"):
+                mainnews_path = '/home/maria/parser/_mainnews_'
             else:
-                os.mkdir("C:\parser\_mainnews_")
-                topnews_path = 'C:\parser\_mainnews_'
-            if os.path.exists("C:\parser\_othnews_"):
-                othnews_path = 'C:\parser\_othnews_'
+                os.mkdir("/home/maria/parser/_mainnews_")
+                topnews_path = '/home/maria/parser/_mainnews_'
+            if os.path.exists("/home/maria/parser/_othnews_"):
+                othnews_path = '/home/maria/parser/_othnews_'
             else:
-                os.mkdir("C:\parser\_othnews_")
-                othnews_path = 'C:\parser\_othnews_'
-            if os.path.exists("C:\parser\_hournews_"):
-                hournews_path = 'C:\parser\_hournews_'
+                os.mkdir("/home/maria/parser/_othnews_")
+                othnews_path = '/home/maria/parser/_othnews_'
+            if os.path.exists("/home/maria/parser/_hournews_"):
+                hournews_path = '/home/maria/parser/_hournews_'
             else:
-                os.mkdir("C:\parser\_hournews_")
-                hournews_path = 'C:\parser\_hournews_'
+                os.mkdir("/home/maria/parser/_hournews_")
+                hournews_path = '/home/maria/parser/_hournews_'
 
             news_block = []
 
