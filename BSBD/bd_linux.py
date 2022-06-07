@@ -32,25 +32,13 @@ def clicked():
         new_main_label = tk.Label(new_window, text='Введите SQL запрос', font=('Arial', 13), **header_padding)
         new_main_label.pack()
 
-        print("Database opened successfully")
         cur = con.cursor()
-        cur.execute('''DROP TABLE IF EXISTS MAINNEWS''')
-        cur.execute('''DROP TABLE IF EXISTS HOURNEWS''')
-        cur.execute('''DROP TABLE IF EXISTS TOPNEWS''')
-        cur.execute('''DROP TABLE IF EXISTS OTHNEWS''')
-        cur.execute('''CREATE TABLE MAINNEWS (NAME TEXT NOT NULL, FILE TEXT);''')
-        print("Table MAINNEWS created succcessfully")
-        cur.execute('''CREATE TABLE HOURNEWS (NAME TEXT NOT NULL, FILE TEXT);''')
-        print("Table HOURNEWS created succcessfully")
-        cur.execute('''CREATE TABLE TOPNEWS (NAME TEXT NOT NULL, FILE TEXT);''')
-        print("Table TOPNEWS created succcessfully")
-        cur.execute('''CREATE TABLE OTHNEWS (NAME TEXT NOT NULL, FILE TEXT, KATEGORY TEXT, COMMENTS TEXT);''')
-        print("Table OTHNEWS created succcessfully")
 
         def parser():
             url = 'http://vz.ru'
             page = requests.get(url)
-            print (page.status_code)
+            if page.status_code == 200:
+                print("Подключение к vz.ru прошло успешно")
             soup = BeautifulSoup(page.text, 'html.parser')
 
             main_all = soup.findAll(name='div', class_='mainnews')
@@ -321,12 +309,23 @@ def clicked():
                 list = cur.fetchall()
                 heads = ['Название', 'Ссылка']
 
-            elif "create" in sql or "drop" in sql or "insert" in sql or "update" in sql or "delete" in sql:
+            elif sql == "select * from favourites":
+                list = cur.fetchall()
+                heads = ['Название (mainnews)', 'Ссылка (mainnews)', 'Название (othnews)', 'Ссылка (othnews)', 'Название (hournews)', 'Ссылка (hournews)', 'Название (topnews)', 'Ссылка (topnews)']
+            elif sql == "select * from notes":
+                list = cur.fetchall()
+                heads = ['Название (mainnews)', 'Заметка (mainnews)', 'Название (othnews)', 'Заметка (othnews)', 'Название (hournews)', 'Заметка (hournews)', 'Название (topnews)', 'Заметка (topnews)']
+            elif sql == "select * from othnews_kategory":
+                list = cur.fetchall()
+                heads = ['Название', 'Категория']
+            elif sql == "select * from othnews_comments":
+                list = cur.fetchall()
+                heads = ['Название', 'Комментарии']
+
+            elif "create" in sql or "drop" in sql or "insert" in sql or "update" in sql:
                 print ("Команда выполнена успешно")
-                print ("Ошибка")
                 heads = [0]
                 list = [0]
-
             else:
                 print ("Ошибка")
                 heads = [0]
@@ -356,6 +355,7 @@ def clicked():
         new_window.mainloop()
 
 window = tk.Tk()
+window["bg"] = "#75ddf5"
 window.title('Парсер vz.ru')
 window.geometry('450x450')
 window.resizable(False, False)
@@ -367,39 +367,39 @@ label_font = ('Arial', 11)
 base_padding = {'padx': 10, 'pady': 8}
 header_padding = {'padx': 10, 'pady': 12}
 
-main_label = tk.Label(window, text='Авторизация', font=font_header, **header_padding)
+main_label = tk.Label(window, text='Авторизация', font=font_header, **header_padding, background="#75ddf5")
 main_label.pack()
 
 # метка для поля ввода имени
-username_label = tk.Label(window, text='Имя пользователя: ', font=label_font , **base_padding)
+username_label = tk.Label(window, text='Имя пользователя: ', font=label_font , **base_padding, background="#75ddf5")
 username_label.pack()
 # поле ввода имени
 username_entry = tk.Entry(window, bg='#fff', fg='#444', font=font_entry)
 username_entry.pack()
 
 # метка для поля ввода пароля
-password_label = tk.Label(window, text='Пароль: ', font=label_font , **base_padding)
+password_label = tk.Label(window, text='Пароль: ', font=label_font , **base_padding, background="#75ddf5")
 password_label.pack()
 # поле ввода пароля
 password_entry = tk.Entry(window, show='*', bg='#fff', fg='#444', font=font_entry)
 password_entry.pack()
 
 # метка для поля ввода host
-host_label = tk.Label(window, text='Host: ', font=label_font , **base_padding)
+host_label = tk.Label(window, text='Host: ', font=label_font , **base_padding, background="#75ddf5")
 host_label.pack()
 # поле ввода host
 host_entry = tk.Entry(window, bg='#fff', fg='#444', font=font_entry)
 host_entry.pack()
 
 # метка для поля ввода port
-port_label = tk.Label(window, text='Порт: ', font=label_font , **base_padding)
+port_label = tk.Label(window, text='Порт: ', font=label_font , **base_padding, background="#75ddf5")
 port_label.pack()
 # поле ввода port
 port_entry = tk.Entry(window, bg='#fff', fg='#444', font=font_entry)
 port_entry.pack()
 
 # метка для поля ввода названия БД
-db_name_label = tk.Label(window, text='Имя БД: ', font=label_font , **base_padding)
+db_name_label = tk.Label(window, text='Имя БД: ', font=label_font , **base_padding, background="#75ddf5")
 db_name_label.pack()
 # поле ввода названия БД
 db_name_entry = tk.Entry(window, bg='#fff', fg='#444', font=font_entry)
